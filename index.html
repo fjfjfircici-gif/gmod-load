@@ -1,28 +1,307 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <title>Loading Screen</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Whiteside RP - Chargement</title>
   <style>
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
+      font-family: Arial, sans-serif;
     }
 
     html, body {
       width: 100%;
       height: 100%;
+      overflow: hidden;
+      color: white;
     }
 
     body {
-      background-image: url("loading.jpg");
-      background-position: center;
-      background-repeat: no-repeat;
+      background: url("loading.jpg") no-repeat center center;
       background-size: cover;
+      position: relative;
+      animation: slowZoom 18s ease-in-out infinite alternate;
+    }
+
+    .overlay {
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(to bottom, rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0.72)),
+        radial-gradient(circle at center, rgba(0, 110, 255, 0.10), rgba(0, 0, 0, 0.2));
+      z-index: 1;
+    }
+
+    .topbar {
+      position: absolute;
+      top: 25px;
+      left: 30px;
+      right: 30px;
+      z-index: 3;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .brand {
+      font-size: 18px;
+      font-weight: bold;
+      letter-spacing: 2px;
+      color: rgba(255,255,255,0.95);
+      text-shadow: 0 0 12px rgba(255,255,255,0.2);
+    }
+
+    .status {
+      font-size: 14px;
+      padding: 10px 16px;
+      border-radius: 999px;
+      background: rgba(0,0,0,0.35);
+      border: 1px solid rgba(255,255,255,0.12);
+      backdrop-filter: blur(6px);
+      color: rgba(255,255,255,0.9);
+    }
+
+    .center {
+      position: absolute;
+      inset: 0;
+      z-index: 3;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 30px;
+    }
+
+    .panel {
+      background: rgba(0, 0, 0, 0.28);
+      border: 1px solid rgba(255,255,255,0.10);
+      backdrop-filter: blur(8px);
+      padding: 40px 50px;
+      border-radius: 24px;
+      box-shadow: 0 15px 50px rgba(0,0,0,0.35);
+      max-width: 900px;
+      width: 100%;
+    }
+
+    .logo {
+      font-size: 18px;
+      letter-spacing: 6px;
+      color: #d6e7ff;
+      margin-bottom: 18px;
+      opacity: 0.9;
+    }
+
+    h1 {
+      font-size: 78px;
+      line-height: 1;
+      letter-spacing: 4px;
+      margin-bottom: 18px;
+      text-shadow: 0 0 18px rgba(255,255,255,0.18);
+    }
+
+    .subtitle {
+      font-size: 24px;
+      color: rgba(255,255,255,0.88);
+      margin-bottom: 28px;
+      min-height: 30px;
+    }
+
+    .progress-wrap {
+      width: 100%;
+      max-width: 560px;
+      margin: 0 auto 16px auto;
+    }
+
+    .progress-bar {
+      width: 100%;
+      height: 10px;
+      background: rgba(255,255,255,0.12);
+      border-radius: 999px;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .progress-fill {
+      width: 35%;
+      height: 100%;
+      border-radius: 999px;
+      background: linear-gradient(90deg, #4da3ff, #9fd0ff, #ffffff);
+      box-shadow: 0 0 20px rgba(77,163,255,0.45);
+      animation: progressMove 3s ease-in-out infinite alternate;
+    }
+
+    .hint {
+      margin-top: 10px;
+      font-size: 14px;
+      color: rgba(255,255,255,0.72);
+    }
+
+    .bottom {
+      position: absolute;
+      left: 30px;
+      right: 30px;
+      bottom: 25px;
+      z-index: 3;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .card {
+      background: rgba(0,0,0,0.32);
+      border: 1px solid rgba(255,255,255,0.10);
+      backdrop-filter: blur(8px);
+      padding: 16px 20px;
+      border-radius: 18px;
+      min-width: 260px;
+      box-shadow: 0 10px 35px rgba(0,0,0,0.25);
+    }
+
+    .card-title {
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: rgba(255,255,255,0.6);
+      margin-bottom: 8px;
+    }
+
+    .card-text {
+      font-size: 16px;
+      color: rgba(255,255,255,0.92);
+      line-height: 1.5;
+    }
+
+    .tips {
+      max-width: 420px;
+    }
+
+    .dot {
+      display: inline-block;
+      animation: blink 1.4s infinite;
+    }
+
+    .dot:nth-child(2) {
+      animation-delay: 0.2s;
+    }
+
+    .dot:nth-child(3) {
+      animation-delay: 0.4s;
+    }
+
+    @keyframes blink {
+      0%, 80%, 100% { opacity: 0.25; }
+      40% { opacity: 1; }
+    }
+
+    @keyframes progressMove {
+      0% { width: 28%; }
+      100% { width: 86%; }
+    }
+
+    @keyframes slowZoom {
+      0% { transform: scale(1); }
+      100% { transform: scale(1.04); }
+    }
+
+    @media (max-width: 900px) {
+      h1 {
+        font-size: 48px;
+      }
+
+      .subtitle {
+        font-size: 18px;
+      }
+
+      .panel {
+        padding: 28px 22px;
+      }
+
+      .bottom {
+        left: 15px;
+        right: 15px;
+        bottom: 15px;
+      }
+
+      .topbar {
+        left: 15px;
+        right: 15px;
+        top: 15px;
+      }
     }
   </style>
 </head>
 <body>
+  <div class="overlay"></div>
+
+  <div class="topbar">
+    <div class="brand">WHITESIDE RP</div>
+    <div class="status">Connexion en cours <span class="dot">.</span><span class="dot">.</span><span class="dot">.</span></div>
+  </div>
+
+  <div class="center">
+    <div class="panel">
+      <div class="logo">ROLEPLAY • COMMUNAUTÉ • IMMERSION</div>
+      <h1>WHITESIDE RP</h1>
+      <div class="subtitle" id="subtitle">Chargement des ressources du serveur...</div>
+
+      <div class="progress-wrap">
+        <div class="progress-bar">
+          <div class="progress-fill"></div>
+        </div>
+        <div class="hint">Merci de patienter pendant la connexion au serveur.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="bottom">
+    <div class="card">
+      <div class="card-title">Communauté</div>
+      <div class="card-text">
+        Discord : <strong>discord.gg/4BGArFqTpc</strong><br>
+        Serveur : <strong>Whiteside RP</strong>
+      </div>
+    </div>
+
+    <div class="card tips">
+      <div class="card-title">Conseil</div>
+      <div class="card-text" id="tip">
+        Respectez le règlement et profitez d'une expérience roleplay immersive.
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const subtitles = [
+      "Chargement des ressources du serveur...",
+      "Connexion à Whiteside RP...",
+      "Préparation de votre expérience roleplay...",
+      "Synchronisation des données en cours..."
+    ];
+
+    const tips = [
+      "Respectez le règlement et profitez d'une expérience roleplay immersive.",
+      "Rejoignez le Discord pour suivre les annonces du serveur.",
+      "Un bon roleplay rend l'expérience meilleure pour tout le monde.",
+      "Préparez-vous à entrer dans la ville de Whiteside RP."
+    ];
+
+    let subtitleIndex = 0;
+    let tipIndex = 0;
+
+    setInterval(() => {
+      subtitleIndex = (subtitleIndex + 1) % subtitles.length;
+      document.getElementById("subtitle").textContent = subtitles[subtitleIndex];
+    }, 3000);
+
+    setInterval(() => {
+      tipIndex = (tipIndex + 1) % tips.length;
+      document.getElementById("tip").textContent = tips[tipIndex];
+    }, 5000);
+  </script>
 </body>
 </html>
